@@ -1,6 +1,12 @@
-require "newsjournal/version"
+require_relative "./newsjournal/version"
+require_relative "./newsjournal/cli"
+#require_relative "./newsjournal/breakingnews"
+require_relative "./newsjournal/newsscrape"
+require_relative "./newsjournal/newstime"
 
-module Newsjournal
-  class Error < StandardError; end
-  # Your code goes here...
-end
+require 'nokogiri'
+require 'httparty'
+require 'pry'
+require 'awesome_print'
+require 'launchy'
+require 'colorize'
