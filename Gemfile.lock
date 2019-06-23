@@ -1,13 +1,3 @@
-PATH
-  remote: .
-  specs:
-    newsjournal (0.1.0)
-      awesome_print
-      colorize
-      httparty
-      launchy
-      nokogiri
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -16,7 +6,6 @@ GEM
     awesome_print (1.8.0)
     coderay (1.1.2)
     colorize (0.8.1)
-    diff-lcs (1.3)
     httparty (0.17.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -34,35 +23,17 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.1.0)
-    rake (10.5.0)
-    rspec (3.8.0)
-      rspec-core (~> 3.8.0)
-      rspec-expectations (~> 3.8.0)
-      rspec-mocks (~> 3.8.0)
-    rspec-core (3.8.0)
-      rspec-support (~> 3.8.0)
-    rspec-expectations (3.8.4)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.8.0)
-    rspec-mocks (3.8.0)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.8.0)
-    rspec-support (3.8.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   awesome_print
-  bundler (~> 1.17)
   colorize
   httparty
   launchy
-  newsjournal!
   nokogiri
   pry
-  rake (~> 10.0)
-  rspec (~> 3.0)
 
 BUNDLED WITH
    1.17.3
