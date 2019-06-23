@@ -5,7 +5,7 @@ class Newsjournal::NewsScrape
     attr_accessor :headline, :url, :sum, :date_auth, :article_content
  
     def self.getNewsSource
-        news_source = 'https://www.marketwatch.com/latest-news'
+        news_source = 'https://www.marketwatch.com/story'
         Nokogiri::HTML(HTTParty.get(news_source))
     end
 

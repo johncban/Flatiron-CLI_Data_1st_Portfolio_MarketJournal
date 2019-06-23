@@ -53,8 +53,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   bundler (~> 1.17)
+  colorize
+  httparty
+  launchy
   newsjournal!
+  nokogiri
   pry
   rake (~> 10.0)
   rspec (~> 3.0)

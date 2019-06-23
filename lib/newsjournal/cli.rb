@@ -1,6 +1,6 @@
 class Newsjournal::CLI
     def contents
-        current_time
+        #current_time
         news_greet
         news_articles
         news_articles_menu
@@ -8,29 +8,19 @@ class Newsjournal::CLI
         news_close
     end
 
-    def current_time
-        user_time = Newsjournal::NewsTime.currentTime
-        user_time
+    def news_greet
+        Newsjournal::NewsTime.currentTime 
+        Newsjournal::NewsTime.newsGreet
     end
 
+=begin
     def news_greet
-        puts <<-'EOF'
-
- _    _        _                                _           _    _             _   _                      
- | |  | |      | |                              | |         | |  | |           | \ | |                     
- | |  | |  ___ | |  ___  ___   _ __ ___    ___  | |_  ___   | |_ | |__    ___  |  \| |  ___ __      __ ___ 
- | |/\| | / _ \| | / __|/ _ \ | '_ ` _ \  / _ \ | __|/ _ \  | __|| '_ \  / _ \ | . ` | / _ \\ \ /\ / // __|
- \  /\  /|  __/| || (__| (_) || | | | | ||  __/ | |_| (_) | | |_ | | | ||  __/ | |\  ||  __/ \ V  V / \__ \
-  \/  \/  \___||_| \___|\___/ |_| |_| |_| \___|  \__|\___/   \__||_| |_| \___| \_| \_/ \___|  \_/\_/  |___/
-                                                                                                           
-                                                                                                           
- 
-        EOF
-        puts "A Ruby CLI Gem that reports the whole news using both the terminal and you're web browser!".bold.green
+        
         puts "--------------------------------------------------------------------------------------".blue
         puts "Here are the following Financial breaking news...".bold.white
         puts "--------------------------------------------------------------------------------------".blue
     end
+=end
 
     def news_articles
         breakingNews = Newsjournal::NewsScrape.todayNews
@@ -71,7 +61,7 @@ class Newsjournal::CLI
                    puts "Date and Author:  #{e[:date_auth]}".light_blue
                    puts "\n"
                    puts "--------------------------------------------------------------------------------------".green
-                   Launchy.open(link)
+                   #Launchy.open(link)
                    puts ar_content.green
                    puts "--------------------------------------------------------------------------------------".green
                 when "b"
