@@ -15,6 +15,8 @@ class Newsjournal::CLI
     end
 
     def news_articles
+        Newsjournal::NewsScrape.scrapeLatestArticles
+=begin
         breakingNews = Newsjournal::NewsScrape.todayNews
         breakingNews.each_with_index {|e, i|
             puts "[#{i+1}] - ".bold + "#{e[:headline]}".colorize(:color => :light_blue)
@@ -22,9 +24,11 @@ class Newsjournal::CLI
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read".bold.white
         puts "--------------------------------------------------------------------------------------".blue
+=end
     end
 
     def news_articles_menu
+=begin
         input = nil
         while input != "X"
             #binding.pry
@@ -64,6 +68,7 @@ class Newsjournal::CLI
                 end
             }
         end
+=end
     end
 
     def news_menu
