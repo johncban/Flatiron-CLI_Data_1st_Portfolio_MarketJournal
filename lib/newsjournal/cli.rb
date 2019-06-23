@@ -1,6 +1,5 @@
 class Newsjournal::CLI
     def contents
-        current_time
         news_greet
         news_articles
         news_articles_menu
@@ -8,25 +7,8 @@ class Newsjournal::CLI
         news_close
     end
 
-    def current_time
-        user_time = Newsjournal::NewsTime.currentTime
-        user_time
-    end
-
     def news_greet
-        puts <<-'EOF'
-
- _    _        _                                _           _    _             _   _                      
- | |  | |      | |                              | |         | |  | |           | \ | |                     
- | |  | |  ___ | |  ___  ___   _ __ ___    ___  | |_  ___   | |_ | |__    ___  |  \| |  ___ __      __ ___ 
- | |/\| | / _ \| | / __|/ _ \ | '_ ` _ \  / _ \ | __|/ _ \  | __|| '_ \  / _ \ | . ` | / _ \\ \ /\ / // __|
- \  /\  /|  __/| || (__| (_) || | | | | ||  __/ | |_| (_) | | |_ | | | ||  __/ | |\  ||  __/ \ V  V / \__ \
-  \/  \/  \___||_| \___|\___/ |_| |_| |_| \___|  \__|\___/   \__||_| |_| \___| \_| \_/ \___|  \_/\_/  |___/
-                                                                                                           
-                                                                                                           
- 
-        EOF
-        puts "A Ruby CLI Gem that reports the whole news using both the terminal and you're web browser!".bold.green
+        Newsjournal::NewsGreet.newsStartGreet
         puts "--------------------------------------------------------------------------------------".blue
         puts "Here are the following Financial breaking news...".bold.white
         puts "--------------------------------------------------------------------------------------".blue
@@ -90,9 +72,7 @@ class Newsjournal::CLI
 
 
     def news_close
-        puts `clear`
-        puts "Thanks for Reading the News Journal!".white.bold
-        exit!
+        Newsjournal::NewsGreet.newsEndGreet
     end
 
 end
