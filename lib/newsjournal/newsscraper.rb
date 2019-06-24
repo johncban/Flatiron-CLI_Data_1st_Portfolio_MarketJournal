@@ -2,7 +2,8 @@
 
 class Newsjournal::NewsScrape
 
-    attr_accessor :headline, :url, :sum, :date_auth, :article_content
+    #attr_accessor :headline, :url, :sum, :date_auth, :article_content
+    
  
     NEWS_URL = 'https://www.marketwatch.com/story'
 
@@ -19,9 +20,12 @@ class Newsjournal::NewsScrape
     def self.scrapeLatestArticles
         list_articles = getNewsSource.css("div.article__content")
         list_articles.each { |ar|
-            ar_title = ar.css(".article__headline a.link").text.split.join(" ")
-            ar_url = ar.css(".article__headline a.link").collect { |list| list['href'] }
-            #Newsjournal::NewsArticle.new(ar_title)
+            input = {
+                ar_headline: ar.css(".article__headline").text.split.join(" "),
+                ar_url: ar.css("a.link").attr('href').text
+            }
+
+            Newsjournal::NewsArticle.new(input)
             binding.pry
         }
     end

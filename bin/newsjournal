@@ -3,4 +3,5 @@
 require './lib/newsjournal'
 
 
-Newsjournal::CLI.new.contents
+app = Newsjournal::CLI.new.contents
+app.run

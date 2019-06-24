@@ -1,7 +1,8 @@
 class Newsjournal::CLI
     def contents
         news_greet
-        news_articles
+        # news_articles
+        Newsjournal::NewsScrape.scrapeLatestArticles
         news_articles_menu
         news_menu
         news_close
