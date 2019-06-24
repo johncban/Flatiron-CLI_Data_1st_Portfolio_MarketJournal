@@ -13,16 +13,17 @@ newsjournal
 ├── README.md
 ├── Rakefile
 ├── bin
-│   ├── console
-│   ├── newsjournal
-│   └── setup
+│   ├── console
+│   ├── newsjournal
+│   └── setup
 ├── lib
-│   ├── newsjournal
-│   │   ├── cli.rb
-│   │   ├── newsscrape.rb
-│   │   ├── newstime.rb
-│   │   └── version.rb
-│   └── newsjournal.rb
+│   ├── newsjournal
+│   │   ├── cli.rb
+│   │   ├── newsarticle.rb
+│   │   ├── newsgreet.rb
+│   │   ├── newsscraper.rb
+│   │   └── version.rb
+│   └── newsjournal.rb
 ├── newsjournal.gemspec
 └── spec
     ├── newsjournal_spec.rb
