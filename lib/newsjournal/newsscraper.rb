@@ -4,8 +4,8 @@ class Newsjournal::NewsScraper
 
     # Begin scraping process using nokogiri.
     def self.getNewsSource
-        dat = Nokogiri::HTML(HTTParty.get(BASE_URL)) # Scrape the BASE_URL.
-        dat.css("div.article__content")              # Target css class node to be scraped.
+        @dat = Nokogiri::HTML(HTTParty.get(BASE_URL)) # Scrape the BASE_URL.
+        @dat.css("div.article__content")              # Target css class node to be scraped.
     end
 
     
@@ -22,7 +22,7 @@ class Newsjournal::NewsScraper
                     sum: nw.css(".article__summary").text.split.join(" "),
                     date_auth: nw.css(".article__details").text.split.join(" "),
                 }
-                Newsjournal::NewsArticle.new(news)                         # Initialize the news hash. 
+                Newsjournal::NewsArticle.new(news)                    # Initialize the news hash. 
             end
         }
         #binding.pry
@@ -30,7 +30,7 @@ class Newsjournal::NewsScraper
 
     # Begin scraping the individual url for full content of each article.
     def self.scrapeArticleContent(url)
-        @content = Nokogiri::HTML(HTTParty.get(url)) # Get the url of each article as an agument.
-        return @content                              # Explicitly return the @content.
+        @contentsrc = Nokogiri::HTML(HTTParty.get(url))     # Get the url of each article as an agument.
+        @contentsrc.xpath("//div[@id='article-body']").text.split.join(" ").rjust(20) # Scrape the specific xpath node to be scraped then split the array.
     end
 end

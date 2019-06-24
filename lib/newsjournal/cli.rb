@@ -1,10 +1,11 @@
 class Newsjournal::CLI
     def contents
-        news_greet
-        news_articles
-        news_articles_menu
-        news_menu
-        news_close
+        self.news_greet
+        self.news_fetch
+        self.news_articles
+        self.news_articles_menu
+        self.news_menu
+        self.news_close
     end
 
     def news_greet
@@ -14,9 +15,13 @@ class Newsjournal::CLI
         puts "--------------------------------------------------------------------------------------".blue
     end
 
-    def news_articles
+    def news_fetch
         Newsjournal::NewsScraper.scrapeArticleHeadlines
+    end
 
+    def news_articles
+        headlines = Newsjournal::NewsArticle.allnews.take(40)
+        headlines.each_with_index{|ar, id| puts "#{id + 1}. #{ar.headline}"}
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read".bold.white
         puts "--------------------------------------------------------------------------------------".blue
@@ -24,7 +29,7 @@ class Newsjournal::CLI
 
     def news_articles_menu
         input = nil
-        while input != "X"
+        while input != "x"
             #binding.pry
             
             puts "\n"
@@ -34,25 +39,27 @@ class Newsjournal::CLI
 
             input = gets.strip.downcase
 
-            breaking = NewsScrape.todayNews
+            breaking = Newsjournal::NewsArticle.allnews
             breaking.each_with_index{ |e, i|
                 #binding.pry
+
+                
 
                 case input
                 when "#{i+1}"
                    puts `clear`
-                   link = e[:url].map(&:to_s).shift.strip
-                   ar_content = NewsScrape.scrapeArticleContent(link)
-                   puts "- #{e[:headline]} -".bold.green
+                   link = e.url.map(&:to_s).shift.strip
+                   full_article = Newsjournal::NewsScraper.scrapeArticleContent(link)
+                   puts "- #{e.headline} -".bold.green
                    puts "\n"
                    puts "Summary".bold
-                   puts "#{e[:sum]}".white
+                   puts "#{e.sum}".white
                    puts "--------------------------------------------------------------------------------------".blue
-                   puts "Date and Author:  #{e[:date_auth]}".light_blue
+                   puts "Date and Author:  #{e.date_auth}".light_blue
                    puts "\n"
                    puts "--------------------------------------------------------------------------------------".green
                    Launchy.open(link)
-                   puts ar_content.green
+                   puts full_article.green
                    puts "--------------------------------------------------------------------------------------".green
                 when "b"
                     puts `clear`
