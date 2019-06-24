@@ -1,58 +1,36 @@
+class Newsjournal::NewsScraper
+    # Provide Base or Link URL to scrape.
+    BASE_URL = 'https://www.marketwatch.com/latest-news'
 
-
-class Newsjournal::NewsScrape
-
-    #attr_accessor :headline, :url, :sum, :date_auth, :article_content
-    
- 
-    NEWS_URL = 'https://www.marketwatch.com/story'
-
+    # Begin scraping process using nokogiri.
     def self.getNewsSource
-        Nokogiri::HTML(HTTParty.get(NEWS_URL))
+        dat = Nokogiri::HTML(HTTParty.get(BASE_URL)) # Scrape the BASE_URL.
+        dat.css("div.article__content")              # Target css class node to be scraped.
     end
 
-=begin
-    def self.scrapeArticles
-        getNewsSource.css("div.article__content")
-    end
-=end
-
-    def self.scrapeLatestArticles
-        list_articles = getNewsSource.css("div.article__content")
-        list_articles.each { |ar|
-            input = {
-                ar_headline: ar.css(".article__headline").text.split.join(" "),
-                ar_url: ar.css("a.link").attr('href').text
-            }
-
-            Newsjournal::NewsArticle.new(input)
-            binding.pry
-        }
-    end
-
-
-    def self.scrapeArticleContent(url)
-        @doc = Nokogiri::HTML(HTTParty.get(url))
-        article_content = @doc.xpath("//div[@id='article-body']").text.split.join(" ").ljust(20)
-    end
-
-=begin
-    def self.todayNews
-        article = []
-        scrapeArticles.each { |n|
-            headline = n.css(".article__headline a.link").text.split.join(" ")
-            url = n.css(".article__headline a.link").collect { |list| list['href'] }
-            sum = n.css(".article__summary").text.split.join(" ")
-            date_auth = n.css(".article__details").text.split.join(" ")
-
-            if headline == ""
+    
+    # Begin scraping the article headline, url, summary and date with author.
+    def self.scrapeArticleHeadlines
+        getNewsSource.each { |nw|    # Iterate with nw argument to get the individual scraped information values.
+            sum = nw.css(".article__headline a.link").text.split.join(" ") # Detect if summary is empty.
+            if sum == ""                                                   # If summary is empty remove the empty article using xpath.
                 getNewsSource.xpath('//text()').find_all {|t| t.to_s.strip == ''}.collect(&:remove)
             else
-                article << {headline: headline, url: url, sum: sum, date_auth: date_auth}
+                news = {                                                   # Hash the headline, url, sum and date or "block the code " for NewsArticle.
+                    headline: nw.css(".article__headline a.link").text.split.join(" "),
+                    url: nw.css(".article__headline a.link").collect { |list| list['href'] },
+                    sum: nw.css(".article__summary").text.split.join(" "),
+                    date_auth: nw.css(".article__details").text.split.join(" "),
+                }
+                Newsjournal::NewsArticle.new(news)                         # Initialize the news hash. 
             end
         }
-        article
+        #binding.pry
     end
-=end
 
+    # Begin scraping the individual url for full content of each article.
+    def self.scrapeArticleContent(url)
+        @content = Nokogiri::HTML(HTTParty.get(url)) # Get the url of each article as an agument.
+        return @content                              # Explicitly return the @content.
+    end
 end

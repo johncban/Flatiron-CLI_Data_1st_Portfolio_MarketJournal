@@ -1,17 +1,19 @@
 class Newsjournal::NewsArticle
 
-    @@all = []
+    attr_reader :headline, :url, :sum, :date_auth
 
-    attr_accessor :ar_headline, :ar_url
+    @@allarticles = []
 
-    def self.all
-        @@all
+    def initialize(headline: headline, url: url, sum: sum, date_auth: date_auth)
+        @headline = headline
+        @url = url
+        @sum = sum 
+        @date_auth = date_auth
+        @@allarticles << self
     end
 
-    def initialize(ar_headline: ar_headline, ar_url: ar_url)
-        @ar_headline = ar_headline
-        @ar_url =ar_url
-        @@all << self
+    def self.allnews
+        @@allarticles
     end
 
 end

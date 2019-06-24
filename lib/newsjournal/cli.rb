@@ -1,8 +1,7 @@
 class Newsjournal::CLI
     def contents
         news_greet
-        # news_articles
-        Newsjournal::NewsScrape.scrapeLatestArticles
+        news_articles
         news_articles_menu
         news_menu
         news_close
@@ -16,20 +15,14 @@ class Newsjournal::CLI
     end
 
     def news_articles
-        Newsjournal::NewsScrape.scrapeLatestArticles
-=begin
-        breakingNews = Newsjournal::NewsScrape.todayNews
-        breakingNews.each_with_index {|e, i|
-            puts "[#{i+1}] - ".bold + "#{e[:headline]}".colorize(:color => :light_blue)
-        }
+        Newsjournal::NewsScraper.scrapeArticleHeadlines
+
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read".bold.white
         puts "--------------------------------------------------------------------------------------".blue
-=end
     end
 
     def news_articles_menu
-=begin
         input = nil
         while input != "X"
             #binding.pry
@@ -41,7 +34,7 @@ class Newsjournal::CLI
 
             input = gets.strip.downcase
 
-            breaking = Newsjournal::NewsScrape.todayNews
+            breaking = NewsScrape.todayNews
             breaking.each_with_index{ |e, i|
                 #binding.pry
 
@@ -49,7 +42,7 @@ class Newsjournal::CLI
                 when "#{i+1}"
                    puts `clear`
                    link = e[:url].map(&:to_s).shift.strip
-                   ar_content = Newsjournal::NewsScrape.scrapeArticleContent(link)
+                   ar_content = NewsScrape.scrapeArticleContent(link)
                    puts "- #{e[:headline]} -".bold.green
                    puts "\n"
                    puts "Summary".bold
@@ -69,7 +62,6 @@ class Newsjournal::CLI
                 end
             }
         end
-=end
     end
 
     def news_menu
