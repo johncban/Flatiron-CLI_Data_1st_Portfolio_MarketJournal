@@ -3,8 +3,6 @@ class Newsjournal::CLI
         self.news_greet
         self.news_fetch
         self.news_articles
-        self.news_articles_menu
-        self.news_menu
         self.news_close
     end
 
@@ -17,35 +15,26 @@ class Newsjournal::CLI
 
     def news_fetch
         Newsjournal::NewsScraper.scrapeArticleHeadlines
+
+        bar = ProgressBar.new(100, :bar, :rate, :eta)
+
+        100.times do
+            sleep 0.1
+            bar.increment!
+        end
+
+        puts "\n"
     end
 
     def news_articles
         headlines = Newsjournal::NewsArticle.allnews.take(40)
         headlines.each_with_index{|ar, id| puts "#{id + 1}. #{ar.headline}"}
-        puts "--------------------------------------------------------------------------------------".blue
-        puts "Select an Article ID to Read".bold.white
-        puts "--------------------------------------------------------------------------------------".blue
-    end
-
-    def news_articles_menu
-        input = nil
-        while input != "x"
-            #binding.pry
-            
-            puts "\n"
-            puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
-            puts "Type [ b ] to go back to main menu.".colorize(:color => :light_red).bold
-            puts "\n"
-
-            input = gets.strip.downcase
-
-            breaking = Newsjournal::NewsArticle.allnews
-            breaking.each_with_index{ |e, i|
-                #binding.pry
-
-                
-
-                case input
+        
+        option = nil
+        while option != "x"
+            option = gets.strip.downcase
+            headlines.each_with_index{ |e, i|
+                case option
                 when "#{i+1}"
                    puts `clear`
                    link = e.url.map(&:to_s).shift.strip
@@ -69,12 +58,11 @@ class Newsjournal::CLI
                 end
             }
         end
-    end
 
-    def news_menu
-        news_articles_menu
+        puts "--------------------------------------------------------------------------------------".blue
+        puts "Select an Article ID to Read".bold.white
+        puts "--------------------------------------------------------------------------------------".blue
     end
-
 
     def news_close
         Newsjournal::NewsGreet.newsEndGreet
