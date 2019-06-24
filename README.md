@@ -77,6 +77,7 @@ Make sure you're in the root folder of the clone repo, inside the repo run the f
 3. [HttParty](https://rubygems.org/gems/httparty)
 4. [Launchy](https://rubygems.org/gems/launchy)
 5. [Nokogiri](https://rubygems.org/gems/nokogiri)
+6. [ProgressBar](https://github.com/paul/progress_bar)
 
 
 ## Contributing
