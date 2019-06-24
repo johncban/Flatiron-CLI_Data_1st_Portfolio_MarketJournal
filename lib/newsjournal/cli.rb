@@ -15,41 +15,47 @@ class Newsjournal::CLI
 
     def news_fetch
         Newsjournal::NewsScraper.scrapeArticleHeadlines
-
         bar = ProgressBar.new(100, :bar, :rate, :eta)
-
         100.times do
             sleep 0.1
             bar.increment!
         end
-
-        puts "\n"
     end
 
     def news_articles
         headlines = Newsjournal::NewsArticle.allnews.take(40)
-        headlines.each_with_index{|ar, id| puts "#{id + 1}. #{ar.headline}"}
-        
+        headlines.each_with_index{|ar, id| puts "#{id + 1}- ".bold.green + "#{ar.headline}".white}
+        puts "\n"
+        puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
+        puts "--------------------------------------------------------------------------------------".blue
+        puts "Select an Article ID to Read: ".bold.yellow
         option = nil
-        while option != "x"
+        while option != "b"
             option = gets.strip.downcase
-            headlines.each_with_index{ |e, i|
+
+            if option.to_i > 40
+                puts "Please enter 1 to 40 numerical options for article."
+            else
+                puts "Please enter or follow the screen option only"
+            end 
+
+            headlines.each_with_index{ |far, ind|
                 case option
-                when "#{i+1}"
+                when "#{ind + 1}"
                    puts `clear`
-                   link = e.url.map(&:to_s).shift.strip
-                   full_article = Newsjournal::NewsScraper.scrapeArticleContent(link)
-                   puts "- #{e.headline} -".bold.green
-                   puts "\n"
-                   puts "Summary".bold
-                   puts "#{e.sum}".white
-                   puts "--------------------------------------------------------------------------------------".blue
-                   puts "Date and Author:  #{e.date_auth}".light_blue
-                   puts "\n"
-                   puts "--------------------------------------------------------------------------------------".green
+                   link = far.url.map(&:to_s).shift.strip
                    Launchy.open(link)
+                   full_article = Newsjournal::NewsScraper.scrapeArticleContent(link)
+                   puts "[- #{far.headline} -] \n".bold.green
+                   puts "- Summary -".bold
+                   puts "#{far.sum}".white
+                   puts "--------------------------------------------------------------------------------------\n".blue
+                   puts "Date and Author:  #{far.date_auth}\n".light_blue
                    puts full_article.green
-                   puts "--------------------------------------------------------------------------------------".green
+                   puts "\n"
+                   puts "-> Type [ b ] to go back to main menu.".colorize(:color => :red).bold
+                   puts "-> Type [ x ] to exit the app.".colorize(:color => :red).bold
+                   puts "--------------------------------------------------------------------------------------\n"
                 when "b"
                     puts `clear`
                     contents
@@ -58,7 +64,6 @@ class Newsjournal::CLI
                 end
             }
         end
-
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read".bold.white
         puts "--------------------------------------------------------------------------------------".blue
@@ -67,5 +72,4 @@ class Newsjournal::CLI
     def news_close
         Newsjournal::NewsGreet.newsEndGreet
     end
-
 end

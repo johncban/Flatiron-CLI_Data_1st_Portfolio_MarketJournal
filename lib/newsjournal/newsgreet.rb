@@ -3,7 +3,7 @@ class Newsjournal::NewsGreet
         current_td = Time.now
         puts `clear`
         puts "\n"
-        puts "TODAY IS: #{current_td}".bold.red
+        puts "TODAY IS: #{current_td}".bold.yellow
         news_start_greet = <<-'EOF'
 
  _    _        _                                _           _    _             _   _                      
