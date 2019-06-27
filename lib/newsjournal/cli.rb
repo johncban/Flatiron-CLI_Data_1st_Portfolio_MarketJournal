@@ -1,9 +1,12 @@
 class Newsjournal::CLI
     def contents
+
         self.news_greet
         self.news_fetch
         self.news_articles
+=begin
         self.news_close
+=end
     end
 
     def news_greet
@@ -14,21 +17,18 @@ class Newsjournal::CLI
     end
 
     def news_fetch
-        Newsjournal::NewsScraper.scrapeArticleHeadlines
-        bar = ProgressBar.new(100, :bar, :rate, :eta)
-        100.times do
-            sleep 0.1
-            bar.increment!
-        end
+        Newsjournal::NewsArticle.start_scrape
     end
 
     def news_articles
-        headlines = Newsjournal::NewsArticle.allnews.take(40)
-        headlines.each_with_index{|ar, id| puts "#{id + 1}- ".bold.green + "#{ar.headline}".white}
+        latestnews = Newsjournal::NewsArticle.articles.take(40)
+        latestnews.each_with_index{|ar, id| puts "#{id + 1}- ".bold.green + "#{ar.article}".white}
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read: ".bold.yellow
+
+=begin
         option = nil
         while option != "b"
             option = gets.strip.downcase
@@ -38,7 +38,6 @@ class Newsjournal::CLI
             else
                 puts "Please enter or follow the screen option only"
             end 
-
             headlines.each_with_index{ |far, ind|
                 case option
                 when "#{ind + 1}"
@@ -64,9 +63,8 @@ class Newsjournal::CLI
                 end
             }
         end
-        puts "--------------------------------------------------------------------------------------".blue
-        puts "Select an Article ID to Read".bold.white
-        puts "--------------------------------------------------------------------------------------".blue
+=end
+
     end
 
     def news_close

@@ -1,19 +1,24 @@
 class Newsjournal::NewsArticle
 
-    attr_reader :headline, :url, :sum, :date_auth
-
-    @@allarticles = []
-
-    def self.allnews
-        @@allarticles
+    attr_reader :article, :url, :sum, :date_auth
+    
+    @@articles = []
+    
+    def self.start_scrape
+        Newsjournal::NewsScraper.get_articles
     end
-
-    def initialize(headline: headline, url: url, sum: sum, date_auth: date_auth)
-        @headline = headline
+    
+    def self.articles
+        @@articles
+    end
+        
+    def initialize(article, url, sum, date_auth)
+        @article = article
         @url = url
         @sum = sum 
         @date_auth = date_auth
-        @@allarticles << self
+        @@articles << self
     end
+
 
 end
