@@ -3,7 +3,7 @@ class Newsjournal::NewsGreet
         current_td = Time.now
         puts `clear`
         puts "\n"
-        puts "TODAY IS: #{current_td}".bold.yellow
+        puts "TODAY IS: ".bold.white + "#{current_td}".bold.yellow
         news_start_greet = <<-'EOF'
 
  _    _        _                                _           _    _             _   _                      
@@ -16,9 +16,12 @@ class Newsjournal::NewsGreet
                                                                                                            
  
         EOF
-        puts "#{news_start_greet}".green.bold
+        puts "#{news_start_greet}".blue.bold
         puts "A Ruby CLI Gem that reports the whole news using both the terminal and you're web browser!".bold.green
+        puts "\n"
     end
+
+
 
     def self.newsEndGreet
 
@@ -44,8 +47,9 @@ class Newsjournal::NewsGreet
         EOF
 
         puts `clear`
-        puts "#{news_end_greet}".green.bold
-        sleep(1)
+        puts "#{news_end_greet}".white.bold
+        sleep(0.8)
+        puts `clear`
         exit!
     
     end
