@@ -11,13 +11,15 @@ class Newsjournal::NewsArticle
     def self.articles
         @@articles
     end
-        
+
     def initialize(article, url, sum, date_auth)
         @article = article
         @url = url
         @sum = sum 
         @date_auth = date_auth
+        #@full = Newsjournal::NewsScraper.get_fullarticle(@url)
         @@articles << self
+        #binding.pry
     end
 
 end
