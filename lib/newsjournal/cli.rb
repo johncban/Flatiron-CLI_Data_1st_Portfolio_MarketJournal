@@ -11,17 +11,21 @@ class Newsjournal::CLI
     def news_greet
         Newsjournal::NewsGreet.newsStartGreet
         puts "--------------------------------------------------------------------------------------".blue
-        puts "Here are the following Financial breaking news...".bold.white
+        puts "Here are the following Financial breaking news...".white.bold
         puts "--------------------------------------------------------------------------------------".blue
         Newsjournal::NewsArticle.start_scrape
     end
 
     def news_tagarticle
-        Newsjournal::NewsArticle.articles
+        Newsjournal::NewsArticle.articles.take(40)
     end
 
     def news_articles
-        news_tagarticle.each_with_index{|ar, id| puts "#{id + 1}- ".bold.green + "#{ar.article}".white}
+        news_tagarticle.each_with_index{|ar, id| 
+            puts "#{id + 1}- ".bold.green + "#{ar.article}".bold.yellow
+            puts "|  #{ar.sum}  |".split.join(" ").rjust(20).green
+            puts "\n"
+        }
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
         puts "--------------------------------------------------------------------------------------".blue
@@ -34,21 +38,22 @@ class Newsjournal::CLI
         while option != "b"
             option = gets.strip.downcase
 
-            if option.to_i > 50
-                puts "Please enter 1 to 40 numerical options for article."
+            if option.to_i > 40
+                puts "Please enter 1 to 50 numerical options for article."
             else
                 puts "Please enter or follow the screen option only"
             end 
             
             news_tagarticle.each_with_index{ |far, ind|
+                link = far.url
                 case option
                 when "#{ind + 1}"
                    puts `clear`
-                   link = far.url
                    Launchy.open(link)
                    full_article = Newsjournal::NewsScraper.get_fullarticle(link)
+                   
                    puts "[- #{far.article} -] \n".bold.green
-                   puts "- Summary -".bold
+                   puts "| Summary |".bold
                    puts "#{far.sum}".white
                    puts "--------------------------------------------------------------------------------------\n".blue
                    puts "Date and Author:  #{far.date_auth}\n".light_blue
@@ -65,7 +70,6 @@ class Newsjournal::CLI
                 end
             }
         end
-        
     end
 
     def news_close
