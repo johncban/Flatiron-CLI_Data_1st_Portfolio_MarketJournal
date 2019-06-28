@@ -8,6 +8,5 @@ gem 'pry'
 gem 'awesome_print'
 gem 'launchy'
 gem 'colorize'
-gem 'progress_bar'
 
 gemspec
