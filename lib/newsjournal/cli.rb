@@ -4,9 +4,9 @@ class Newsjournal::CLI
         self.news_greet
         self.news_fetch
         self.news_articles
-=begin
+        self.news_articlemenu
         self.news_close
-=end
+
     end
 
     def news_greet
@@ -20,15 +20,19 @@ class Newsjournal::CLI
         Newsjournal::NewsArticle.start_scrape
     end
 
+    def news_tagarticle
+        Newsjournal::NewsArticle.articles.take(40)
+    end
+
     def news_articles
-        latestnews = Newsjournal::NewsArticle.articles.take(40)
-        latestnews.each_with_index{|ar, id| puts "#{id + 1}- ".bold.green + "#{ar.article}".white}
+        news_tagarticle.each_with_index{|ar, id| puts "#{id + 1}- ".bold.green + "#{ar.article}".white}
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read: ".bold.yellow
+    end
 
-=begin
+    def news_articlemenu
         option = nil
         while option != "b"
             option = gets.strip.downcase
@@ -38,14 +42,15 @@ class Newsjournal::CLI
             else
                 puts "Please enter or follow the screen option only"
             end 
-            headlines.each_with_index{ |far, ind|
+            
+            news_tagarticle.each_with_index{ |far, ind|
                 case option
                 when "#{ind + 1}"
                    puts `clear`
-                   link = far.url.map(&:to_s).shift.strip
+                   link = far.url
                    Launchy.open(link)
-                   full_article = Newsjournal::NewsScraper.scrapeArticleContent(link)
-                   puts "[- #{far.headline} -] \n".bold.green
+                   full_article = Newsjournal::NewsScraper.get_fullarticle(link)
+                   puts "[- #{far.article} -] \n".bold.green
                    puts "- Summary -".bold
                    puts "#{far.sum}".white
                    puts "--------------------------------------------------------------------------------------\n".blue
@@ -63,9 +68,10 @@ class Newsjournal::CLI
                 end
             }
         end
-=end
-
     end
+
+
+    
 
     def news_close
         Newsjournal::NewsGreet.newsEndGreet
