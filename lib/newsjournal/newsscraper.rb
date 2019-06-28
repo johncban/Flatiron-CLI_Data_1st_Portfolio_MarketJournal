@@ -17,11 +17,10 @@ class Newsjournal::NewsScraper
     def self.get_articles
         get_articletag.each { |n|
                 article = n.css(".article__headline").text.split.join(" ")
-                url = n.css(".article__headline a").attr("href").value 
+                url = n.css("a").attr("href").value #collect { |list| list['href'] }
                 sum = n.css(".article__summary").text.split.join(" ")
                 date_auth = n.css(".article__details").text.split.join(" ")
-                
-                if article == ""
+                if article == "" || sum == ""
                     get_articletag.xpath('//text()').find_all {|t| t.to_s.strip == ''}.collect(&:remove)
                 elsif !Newsjournal::NewsArticle.articles.find { |o| o.article == article }
                     Newsjournal::NewsArticle.new(article, url, sum, date_auth)
@@ -32,8 +31,8 @@ class Newsjournal::NewsScraper
     end
 
 
-    def self.get_fullarticle(article_url)
-        contentsrc = get_source(article_url)     # Get the url of each article as an agument.
+    def self.get_fullarticle(full_article)
+        contentsrc = get_source(full_article)     # Get the url of each article as an agument.
         contentsrc.xpath("//div[@id='article-body']").text.split.join(" ").rjust(20) # Scrape the specific xpath node to be scraped then split the array.
     end
 end
