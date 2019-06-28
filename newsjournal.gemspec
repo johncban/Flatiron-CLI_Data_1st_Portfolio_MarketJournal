@@ -45,5 +45,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency "awesome_print"
   spec.add_dependency "launchy"
   spec.add_dependency "colorize"
-  spec.add_dependency "progress_bar"
 end
