@@ -20,5 +20,4 @@ class Newsjournal::NewsArticle
         @@articles << self
     end
 
-
 end

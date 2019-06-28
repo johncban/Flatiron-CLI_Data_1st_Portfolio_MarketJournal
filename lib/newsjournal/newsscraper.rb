@@ -16,26 +16,22 @@ class Newsjournal::NewsScraper
     # Begin scraping the article headline, url, summary and date with author.
     def self.get_articles
         get_articletag.each { |n|
-            article = n.css(".article__headline").text.split.join(" ")
-            if article == ""
-                get_articletag.xpath('//text()').find_all {|t| t.to_s.strip == ''}.collect(&:remove)
-            else
                 article = n.css(".article__headline").text.split.join(" ")
-                url = n.css(".article__headline a").attr("href").value #collect { |list| list['href'] },
+                url = n.css(".article__headline a").attr("href").value 
                 sum = n.css(".article__summary").text.split.join(" ")
                 date_auth = n.css(".article__details").text.split.join(" ")
-                Newsjournal::NewsArticle.new(article, url, sum, date_auth)
-            end
-            #binding.pry
+                
+                if article == ""
+                    get_articletag.xpath('//text()').find_all {|t| t.to_s.strip == ''}.collect(&:remove)
+                elsif !Newsjournal::NewsArticle.articles.find { |o| o.article == article }
+                    Newsjournal::NewsArticle.new(article, url, sum, date_auth)
+                else 
+                    Newsjournal::NewsArticle.articles
+                end
         }
-        #binding.pry
     end
 
-    # Begin scraping the individual url for full content of each article.
-    #def self.scrapeArticleContent(url)
-    #    @contentsrc = Nokogiri::HTML(HTTParty.get(url))     # Get the url of each article as an agument.
-    #    @contentsrc.xpath("//div[@id='article-body']").text.split.join(" ").rjust(20) # Scrape the specific xpath node to be scraped then split the array.
-    #end
+
     def self.get_fullarticle(article_url)
         contentsrc = get_source(article_url)     # Get the url of each article as an agument.
         contentsrc.xpath("//div[@id='article-body']").text.split.join(" ").rjust(20) # Scrape the specific xpath node to be scraped then split the array.

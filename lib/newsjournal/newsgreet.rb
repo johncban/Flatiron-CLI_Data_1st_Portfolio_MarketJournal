@@ -45,6 +45,7 @@ class Newsjournal::NewsGreet
 
         puts `clear`
         puts "#{news_end_greet}".green.bold
+        sleep(1)
         exit!
     
     end

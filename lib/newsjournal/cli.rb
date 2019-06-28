@@ -2,7 +2,6 @@ class Newsjournal::CLI
     def contents
 
         self.news_greet
-        self.news_fetch
         self.news_articles
         self.news_articlemenu
         self.news_close
@@ -14,14 +13,11 @@ class Newsjournal::CLI
         puts "--------------------------------------------------------------------------------------".blue
         puts "Here are the following Financial breaking news...".bold.white
         puts "--------------------------------------------------------------------------------------".blue
-    end
-
-    def news_fetch
         Newsjournal::NewsArticle.start_scrape
     end
 
     def news_tagarticle
-        Newsjournal::NewsArticle.articles.take(40)
+        Newsjournal::NewsArticle.articles
     end
 
     def news_articles
@@ -30,14 +26,15 @@ class Newsjournal::CLI
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read: ".bold.yellow
+        #binding.pry
     end
-
+    
     def news_articlemenu
         option = nil
         while option != "b"
             option = gets.strip.downcase
 
-            if option.to_i > 40
+            if option.to_i > 50
                 puts "Please enter 1 to 40 numerical options for article."
             else
                 puts "Please enter or follow the screen option only"
@@ -68,12 +65,12 @@ class Newsjournal::CLI
                 end
             }
         end
+        
     end
-
-
-    
 
     def news_close
         Newsjournal::NewsGreet.newsEndGreet
     end
+
+
 end
