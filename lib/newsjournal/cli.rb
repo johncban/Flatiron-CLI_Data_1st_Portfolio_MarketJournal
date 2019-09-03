@@ -1,69 +1,64 @@
 class Newsjournal::CLI
     def contents
-        #current_time
-        news_greet
-        news_articles
-        news_articles_menu
-        news_menu
-        news_close
+
+        self.news_greet
+        self.news_articles
+        self.news_articlemenu
+        self.news_close
+
     end
 
     def news_greet
-        Newsjournal::NewsTime.currentTime 
-        Newsjournal::NewsTime.newsGreet
+        Newsjournal::NewsGreet.newsStartGreet
+        puts "--------------------------------------------------------------------------------------".blue
+        puts "Here are the following Financial breaking news...".white.bold
+        puts "--------------------------------------------------------------------------------------".blue
+        Newsjournal::NewsScraper.get_articles
     end
 
-=begin
-    def news_greet
-        
-        puts "--------------------------------------------------------------------------------------".blue
-        puts "Here are the following Financial breaking news...".bold.white
-        puts "--------------------------------------------------------------------------------------".blue
+    def news_tagarticle
+        Newsjournal::NewsArticle.articles
     end
-=end
 
     def news_articles
-        breakingNews = Newsjournal::NewsScrape.todayNews
-        breakingNews.each_with_index {|e, i|
-            puts "[#{i+1}] - ".bold + "#{e[:headline]}".colorize(:color => :light_blue)
+        news_tagarticle.each_with_index{|ar, id| 
+            puts "#{id + 1}- ".bold.green + "#{ar.article}".bold.yellow
         }
+        puts "\n"
+        puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
         puts "--------------------------------------------------------------------------------------".blue
-        puts "Select an Article ID to Read".bold.white
-        puts "--------------------------------------------------------------------------------------".blue
+        puts "Select an Article ID to Read: ".bold.yellow
+        #binding.pry
     end
+    
+    def news_articlemenu
+        option = nil
+        while option != "b"
+            option = gets.strip.downcase
 
-    def news_articles_menu
-        input = nil
-        while input != "X"
-            #binding.pry
+            if option.to_i > 40
+                puts "Please enter 1 to 50 numerical options for article."
+            else
+                puts "Please enter or follow the screen option only"
+            end 
             
-            puts "\n"
-            puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
-            puts "Type [ b ] to go back to main menu.".colorize(:color => :light_red).bold
-            puts "\n"
-
-            input = gets.strip.downcase
-
-            breaking = Newsjournal::NewsScrape.todayNews
-            breaking.each_with_index{ |e, i|
-                #binding.pry
-
-                case input
-                when "#{i+1}"
+            news_tagarticle.each_with_index{ |far, ind|
+                link = far.full
+                case option
+                when "#{ind + 1}"
                    puts `clear`
-                   link = e[:url].map(&:to_s).shift.strip
-                   ar_content = Newsjournal::NewsScrape.scrapeArticleContent(link)
-                   puts "- #{e[:headline]} -".bold.green
-                   puts "\n"
-                   puts "Summary".bold
-                   puts "#{e[:sum]}".white
-                   puts "--------------------------------------------------------------------------------------".blue
-                   puts "Date and Author:  #{e[:date_auth]}".light_blue
-                   puts "\n"
-                   puts "--------------------------------------------------------------------------------------".green
                    #Launchy.open(link)
-                   puts ar_content.green
-                   puts "--------------------------------------------------------------------------------------".green
+                   
+                   puts "[- #{far.article} -] \n".bold.green
+                   puts "| Summary |".bold
+                   puts "#{far.sum}".white
+                   puts "--------------------------------------------------------------------------------------\n".blue
+                   puts "Date and Author:  #{far.date_auth}\n".light_blue
+                   puts link.green
+                   puts "\n"
+                   puts "-> Type [ b ] to go back to main menu.".colorize(:color => :red).bold
+                   puts "-> Type [ x ] to exit the app.".colorize(:color => :red).bold
+                   puts "--------------------------------------------------------------------------------------\n"
                 when "b"
                     puts `clear`
                     contents
@@ -74,15 +69,9 @@ class Newsjournal::CLI
         end
     end
 
-    def news_menu
-        news_articles_menu
-    end
-
-
     def news_close
-        puts `clear`
-        puts "Thanks for Reading the News Journal!".white.bold
-        exit!
+        Newsjournal::NewsGreet.newsEndGreet
     end
+
 
 end
