@@ -10,10 +10,11 @@ class Newsjournal::CLI
 
     def news_greet
         Newsjournal::NewsGreet.newsStartGreet
-        puts "--------------------------------------------------------------------------------------".blue
-        puts "Here are the following Financial breaking news...".white.bold
-        puts "--------------------------------------------------------------------------------------".blue
         Newsjournal::NewsScraper.get_articles
+        article_count = Newsjournal::NewsArticle.articles.length
+        puts "--------------------------------------------------------------------------------------".blue
+        puts "Here are the following #{article_count} breaking news...".white.bold
+        puts "--------------------------------------------------------------------------------------".blue
     end
 
     def news_tagarticle
@@ -22,7 +23,7 @@ class Newsjournal::CLI
 
     def news_articles
         news_tagarticle.each_with_index{|ar, id| 
-            puts "#{id + 1}- ".bold.green + "#{ar.article}".bold.yellow
+            puts "#{id + 1} - ".bold.green + "#{ar.article}".bold.yellow
         }
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
@@ -33,32 +34,50 @@ class Newsjournal::CLI
     
     def news_articlemenu
         option = nil
+        article_count = Newsjournal::NewsArticle.articles.length
         while option != "b"
             option = gets.strip.downcase
 
-            if option.to_i > 40
-                puts "Please enter 1 to 50 numerical options for article."
+            if option.to_i > article_count
+                puts "Please enter 1 to #{article_count} numerical options for article."
             else
                 puts "Please enter or follow the screen option only"
             end 
             
             news_tagarticle.each_with_index{ |far, ind|
-                link = far.full
+                article_title = far.article
+                full_article = far.full
+                sum_article = far.sum
+                date_author = far.date_auth
+                www = far.url
+
                 case option
                 when "#{ind + 1}"
                    puts `clear`
                    #Launchy.open(link)
                    
-                   puts "[- #{far.article} -] \n".bold.green
-                   puts "| Summary |".bold
-                   puts "#{far.sum}".white
-                   puts "--------------------------------------------------------------------------------------\n".blue
-                   puts "Date and Author:  #{far.date_auth}\n".light_blue
-                   puts link.green
+                   puts "[- #{article_title} -]".bold.green
+                   puts " - #{date_author} - \n".yellow
+                   
+                   if sum_article == "" || sum_article == nil 
+                      puts "-- !! Summary Not Available !! --"
+                   else 
+                      puts "| Summary |".bold
+                      puts "#{far.sum}".white
+                   end
+
+                   if full_article == "                                            " || full_article == nil
+                      puts "-- !! Full Article Only Available for Subscribers !! --"
+                   else 
+                      puts "--------------------------------------------------------------------------------------\n".blue
+                      puts full_article.green
+                      puts "--------------------------------------------------------------------------------------\n".blue
+                   end
+
                    puts "\n"
                    puts "-> Type [ b ] to go back to main menu.".colorize(:color => :red).bold
                    puts "-> Type [ x ] to exit the app.".colorize(:color => :red).bold
-                   puts "--------------------------------------------------------------------------------------\n"
+                   
                 when "b"
                     puts `clear`
                     contents

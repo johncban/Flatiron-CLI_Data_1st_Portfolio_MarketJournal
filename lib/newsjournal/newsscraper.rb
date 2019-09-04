@@ -8,8 +8,8 @@ class Newsjournal::NewsScraper
     end
 
     def self.get_articletag
-        dat = get_source(BASE_URL)
-        dat.css("div.component.component--module.more-headlines div.group.group--headlines div.article__content")              # Target css class node to be scraped.
+        @dat = get_source(BASE_URL)
+        @dat.css("div.component.component--module.more-headlines div.group.group--headlines div.article__content")              # Target css class node to be scraped.
     end
 
     def self.r_nil
@@ -20,23 +20,19 @@ class Newsjournal::NewsScraper
     def self.get_articles
         get_articletag.each { |breaking|
                 article = breaking.css("h3.article__headline").text.split.join(" ")
-                # url = n.css("a").attr("href").value #collect { |list| list['href'] }
-                # link = n.xpath('//h3[@class="article__headline"]/a/@href')
-                # url = link.map {|attr| attr.value}
                 url = breaking.css("a.link").attr("href").value
-                # url = n.xpath('//h3[@class="article__headline"]/a/@href')
-                # p url.map {|attr| attr.value}
-                #full = get_fullarticle(url)
                 sum = breaking.css("p.article__summary").text.split.join(" ")
                 date_auth = breaking.css("ul.article__details").text.split.join(" ")
+
                 if url == "#" || url == ""
                    r_nil 
                 elsif !Newsjournal::NewsArticle.articles.detect { |a| a.article == article }
                    full = get_fullarticle(url)
                    Newsjournal::NewsArticle.new(article, url, full, sum, date_auth)
-                end 
+                end
         }
         #binding.pry
+        
     end
 
 
