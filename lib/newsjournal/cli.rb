@@ -34,14 +34,14 @@ class Newsjournal::CLI
     
     def news_articlemenu
         option = nil
-        article_count = Newsjournal::NewsArticle.articles.length
+        article_count = news_tagarticle.size
         while option != "b"
             option = gets.strip.downcase
 
             if option.to_i > article_count
                 puts "Please enter 1 to #{article_count} numerical options for article."
             else
-                puts "Please enter or follow the screen option only"
+                puts "Please enter or follow the screen option only."
             end 
             
             news_tagarticle.each_with_index{ |far, ind|
@@ -60,18 +60,27 @@ class Newsjournal::CLI
                    puts " - #{date_author} - \n".yellow
                    
                    if sum_article == "" || sum_article == nil 
-                      puts "-- !! Summary Not Available !! --"
+                      puts "--------------------------------------------------------------------------------------".red
+                      puts "-- !! Summary Not Available !! --".colorize(:color => :red).bold
+                      puts "--------------------------------------------------------------------------------------".red
                    else 
-                      puts "| Summary |".bold
+                      puts "\n"
+                      puts "| Summary |".colorize(:color => :white).bold
+                      puts "\n"
                       puts "#{far.sum}".white
+                      puts "\n"
                    end
 
-                   if full_article == "                                            " || full_article == nil
-                      puts "-- !! Full Article Only Available for Subscribers !! --"
+                   if full_article == "                    " || full_article == nil
+                      puts "--------------------------------------------------------------------------------------".red
+                      puts "-- !! Full Article Only Available for Subscribers !! --".colorize(:color => :red).bold
+                      puts "--------------------------------------------------------------------------------------".red
                    else 
-                      puts "--------------------------------------------------------------------------------------\n".blue
+                      puts "--------------------------------------------------------------------------------------".blue
+                      puts "\n"
                       puts full_article.green
-                      puts "--------------------------------------------------------------------------------------\n".blue
+                      puts "\n"
+                      puts "--------------------------------------------------------------------------------------".blue
                    end
 
                    puts "\n"
@@ -80,6 +89,7 @@ class Newsjournal::CLI
                    
                 when "b"
                     puts `clear`
+                    news_tagarticle.clear
                     contents
                 when "x"
                     news_close
@@ -91,6 +101,4 @@ class Newsjournal::CLI
     def news_close
         Newsjournal::NewsGreet.newsEndGreet
     end
-
-
 end

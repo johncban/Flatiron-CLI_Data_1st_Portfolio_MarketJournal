@@ -4,11 +4,14 @@ class Newsjournal::NewsArticle
     attr_accessor :full
 
     @@articles = []
-        
+    
+    def self.start_scrape
+        Newsjournal::NewsScraper.get_articles
+    end
+    
     def self.articles
         @@articles
     end
-    
 
     def initialize(article, url, full, sum, date_auth)
         @article = article
@@ -19,6 +22,7 @@ class Newsjournal::NewsArticle
         # @full = Newsjournal::NewsScraper.get_fullarticle(@url)
         @@articles << self
         #p @full
+        #binding.pry
     end
 
 end
