@@ -1,6 +1,6 @@
 class Newsjournal::NewsArticle
 
-    attr_reader :article, :url, :sum, :date_auth
+    attr_reader :article, :url, :sum, :date_auth, :date_stamp
     attr_accessor :full
 
     @@articles = []
@@ -13,12 +13,13 @@ class Newsjournal::NewsArticle
         @@articles
     end
 
-    def initialize(article, url, full, sum, date_auth)
+    def initialize(article, url, full, sum, date_auth, date_stamp)
         @article = article
         @url = url
         @full = full
         @sum = sum 
         @date_auth = date_auth
+        @date_stamp = date_stamp
         # @full = Newsjournal::NewsScraper.get_fullarticle(@url)
         @@articles << self
         #p @full

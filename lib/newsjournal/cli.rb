@@ -23,7 +23,7 @@ class Newsjournal::CLI
 
     def news_articles
         news_tagarticle.each_with_index{|ar, id| 
-            puts "#{id + 1} - ".bold.green + "#{ar.article}".bold.yellow
+            puts "#{id + 1} - ".bold.green + "#{ar.article}".bold.yellow + " -> " + "#{ar.date_stamp}"
         }
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
@@ -32,10 +32,12 @@ class Newsjournal::CLI
         #binding.pry
     end
     
+
+
     def news_articlemenu
         option = nil
         article_count = news_tagarticle.size
-        while option != "b"
+        while option != "x"
             option = gets.strip.downcase
 
             if option.to_i > article_count
@@ -86,7 +88,7 @@ class Newsjournal::CLI
                    puts "\n"
                    puts "-> Type [ b ] to go back to main menu.".colorize(:color => :red).bold
                    puts "-> Type [ x ] to exit the app.".colorize(:color => :red).bold
-                   
+
                 when "b"
                     puts `clear`
                     news_tagarticle.clear
@@ -97,6 +99,9 @@ class Newsjournal::CLI
             }
         end
     end
+
+
+
 
     def news_close
         Newsjournal::NewsGreet.newsEndGreet

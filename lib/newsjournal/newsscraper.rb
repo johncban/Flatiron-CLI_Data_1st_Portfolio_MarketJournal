@@ -13,7 +13,7 @@ class Newsjournal::NewsScraper
     end
 
     def self.r_nil
-        get_latest_headlines.xpath('//text()').find_all {|t| t.to_s.strip == ''}.collect(&:remove)
+        get_articletag.xpath('//text()').find_all {|t| t.to_s.strip == ''}.collect(&:remove)
     end
 
     def self.get_fullarticle(full_article)
@@ -25,17 +25,25 @@ class Newsjournal::NewsScraper
     def self.get_articles
         get_articletag.map { |breaking|
                     article = breaking.css("h3.article__headline").text.split.join(" ")
-                    url = breaking.css("a.link").attr("href").value
+
+                    link = breaking.css("a.link").map { |a_link|
+                        a_link.attribute("href").value
+                    }
+
+                    url = link.join(" ")
+
+                    #url = breaking.css("a.link").attr("href").value
                     sum = breaking.css("p.article__summary").text.split.join(" ")
                     date_auth = breaking.css("ul.article__details").text.split.join(" ")
+                    date_stamp = breaking.css("li.article__timestamp").text.split.join(" ")
+
 
                     if url == "#" || url == ""
                         r_nil 
                     elsif !Newsjournal::NewsArticle.articles.detect { |a| a.article == article }
                         full = get_fullarticle(url)
-                        Newsjournal::NewsArticle.new(article, url, full, sum, date_auth)
+                        Newsjournal::NewsArticle.new(article, url, full, sum, date_auth, date_stamp)
                     end
                 }
-        #binding.pry
     end
 end
