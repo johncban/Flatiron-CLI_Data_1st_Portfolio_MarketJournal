@@ -6,6 +6,7 @@ GEM
     awesome_print (1.8.0)
     coderay (1.1.2)
     colorize (0.8.1)
+    equatable (0.6.1)
     httparty (0.17.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -17,12 +18,29 @@ GEM
     mime-types-data (3.2019.0904)
     mini_portile2 (2.4.0)
     multi_xml (0.6.0)
+    necromancer (0.5.0)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
+    pastel (0.7.3)
+      equatable (~> 0.6)
+      tty-color (~> 0.5)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (4.0.1)
+    tty-color (0.5.0)
+    tty-cursor (0.7.0)
+    tty-font (0.4.0)
+    tty-prompt (0.19.0)
+      necromancer (~> 0.5.0)
+      pastel (~> 0.7.0)
+      tty-reader (~> 0.6.0)
+    tty-reader (0.6.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.7)
+      wisper (~> 2.0.0)
+    tty-screen (0.7.0)
+    wisper (2.0.0)
 
 PLATFORMS
   ruby
@@ -34,6 +52,8 @@ DEPENDENCIES
   launchy
   nokogiri
   pry
+  tty-font
+  tty-prompt
 
 BUNDLED WITH
    1.17.3
