@@ -1,42 +1,49 @@
 class Newsjournal::CLI
     def contents
-
         self.news_greet
         self.news_articles
         self.news_articlemenu
         self.news_close
-
     end
 
     def news_greet
         Newsjournal::NewsGreet.newsStartGreet
         Newsjournal::NewsScraper.get_articles
-        article_count = Newsjournal::NewsArticle.articles.length
         puts "--------------------------------------------------------------------------------------".blue
         puts "Here are the following #{article_count} breaking news...".white.bold
         puts "--------------------------------------------------------------------------------------".blue
     end
 
-    def news_tagarticle
+    def get_article_headlines
         Newsjournal::NewsArticle.articles
     end
 
+    def article_count
+        Newsjournal::NewsArticle.articles.length
+    end
+
+    def screen_clear
+        if Gem.win_platform?
+          system 'cls'
+        else
+          system 'clear'
+        end
+    end
+
     def news_articles
-        news_tagarticle.each_with_index{|ar, id| 
-            puts "#{id + 1} - ".bold.green + "#{ar.article}".bold.yellow + " -> " + "#{ar.date_stamp}"
+        get_article_headlines.each_with_index{|ar, id| 
+            puts "#{id + 1}".yellow + " ‣ " + "#{ar.article}".bold.yellow + "\n" + "      " + "⬡ " + "#{ar.date_stamp}"
         }
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read: ".bold.yellow
-        #binding.pry
     end
     
-
-
     def news_articlemenu
         option = nil
-        article_count = news_tagarticle.size
+        prompt = TTY::Prompt.new 
+
         while option != "x"
             option = gets.strip.downcase
 
@@ -46,16 +53,16 @@ class Newsjournal::CLI
                 puts "Please enter or follow the screen option only."
             end 
             
-            news_tagarticle.each_with_index{ |far, ind|
+            get_article_headlines.each_with_index { |far, ind|
                 article_title = far.article
                 full_article = far.full
                 sum_article = far.sum
                 date_author = far.date_auth
-                www = far.url
+                webbrowser = far.url
 
                 case option
                 when "#{ind + 1}"
-                   puts `clear`
+                   screen_clear
                    #Launchy.open(link)
                    
                    puts "[- #{article_title} -]".bold.green
@@ -75,33 +82,36 @@ class Newsjournal::CLI
 
                    if full_article == "                    " || full_article == nil
                       puts "--------------------------------------------------------------------------------------".red
-                      puts "-- !! Full Article Only Available for Subscribers !! --".colorize(:color => :red).bold
+                      puts "-- !! Full Article is Only Available for Subscribers !! --".colorize(:color => :red).bold
                       puts "--------------------------------------------------------------------------------------".red
+                      response = prompt.select("Do you wanted to read the article online from external source?", ["yes", "no"])
                    else 
                       puts "--------------------------------------------------------------------------------------".blue
                       puts "\n"
                       puts full_article.green
                       puts "\n"
                       puts "--------------------------------------------------------------------------------------".blue
+                      response = prompt.select("Do you wanted to read the article online?", ["yes", "no"])
                    end
 
-                   puts "\n"
-                   puts "-> Type [ b ] to go back to main menu.".colorize(:color => :red).bold
-                   puts "-> Type [ x ] to exit the app.".colorize(:color => :red).bold
+                   if response == "yes"
+                    Launchy.open(webbrowser)
+                   end
 
-                when "b"
-                    puts `clear`
-                    news_tagarticle.clear
-                    contents
-                when "x"
-                    news_close
+                   
+                   menu_response = prompt.select("Go back to Main Screen or Exit?", ["Go Back", "Exit"])
+
+                   if menu_response == "Go Back"
+                        screen_clear
+                        get_article_headlines.clear
+                        contents
+                   elsif menu_response == "Exit"
+                        news_close
+                   end
                 end
             }
         end
     end
-
-
-
 
     def news_close
         Newsjournal::NewsGreet.newsEndGreet
