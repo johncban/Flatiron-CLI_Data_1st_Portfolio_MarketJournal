@@ -19,7 +19,7 @@ class Newsjournal::CLI
     end
 
     def article_count
-        Newsjournal::NewsArticle.articles.length
+        get_article_headlines.length
     end
 
     def screen_clear
@@ -32,7 +32,7 @@ class Newsjournal::CLI
 
     def news_articles
         get_article_headlines.each_with_index{|ar, id| 
-            puts "#{id + 1}".yellow + " ‣ " + "#{ar.article}".bold.yellow + "\n" + "      " + "⬡ " + "#{ar.date_stamp}"
+            puts "#{id + 1}".yellow + " ‣ " + "#{ar.article}".bold.yellow + " ⬡ " + "#{ar.date_stamp}"
         }
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
@@ -53,6 +53,10 @@ class Newsjournal::CLI
                 puts "Please enter or follow the screen option only."
             end 
             
+            #article = Newsjournal::NewsArticle.all[option - 1]
+
+            #get_fullarticle(article.url)
+
             get_article_headlines.each_with_index { |far, ind|
                 article_title = far.article
                 full_article = far.full
@@ -85,6 +89,7 @@ class Newsjournal::CLI
                       puts "-- !! Full Article is Only Available for Subscribers !! --".colorize(:color => :red).bold
                       puts "--------------------------------------------------------------------------------------".red
                       response = prompt.select("Do you wanted to read the article online from external source?", ["yes", "no"])
+                      puts "\n"
                    else 
                       puts "--------------------------------------------------------------------------------------".blue
                       puts "\n"
@@ -92,6 +97,7 @@ class Newsjournal::CLI
                       puts "\n"
                       puts "--------------------------------------------------------------------------------------".blue
                       response = prompt.select("Do you wanted to read the article online?", ["yes", "no"])
+                      puts "\n"
                    end
 
                    if response == "yes"

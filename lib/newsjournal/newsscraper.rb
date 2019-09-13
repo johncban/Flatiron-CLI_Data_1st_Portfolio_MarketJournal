@@ -23,6 +23,7 @@ class Newsjournal::NewsScraper
     
     # Begin scraping the article headline, url, summary and date with author.
     def self.get_articles
+        news_parts = Newsjournal::NewsArticle
         get_articletag.map { |breaking|
                     article = breaking.css("h3.article__headline").text.split.join(" ")
 
@@ -31,19 +32,18 @@ class Newsjournal::NewsScraper
                     }
 
                     url = link.join(" ")
-
-                    #url = breaking.css("a.link").attr("href").value
                     sum = breaking.css("p.article__summary").text.split.join(" ")
                     date_auth = breaking.css("ul.article__details").text.split.join(" ")
                     date_stamp = breaking.css("li.article__timestamp").text.split.join(" ")
 
-
                     if url == "#" || url == ""
                         r_nil 
-                    elsif !Newsjournal::NewsArticle.articles.detect { |a| a.article == article }
+                    elsif !news_parts.articles.detect { |a| a.article == article }
                         full = get_fullarticle(url)
-                        Newsjournal::NewsArticle.new(article, url, full, sum, date_auth, date_stamp)
+                        news_parts.new(article, url, full, sum, date_auth, date_stamp)
                     end
+
                 }
+        #binding.pry
     end
 end
