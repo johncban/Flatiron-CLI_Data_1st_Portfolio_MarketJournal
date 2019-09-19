@@ -53,9 +53,6 @@ class Newsjournal::CLI
                 puts "Please enter or follow the screen option only."
             end 
             
-            #article = Newsjournal::NewsArticle.all[option - 1]
-
-            #get_fullarticle(article.url)
 
             get_article_headlines.each_with_index { |far, ind|
                 article_title = far.article
@@ -67,7 +64,6 @@ class Newsjournal::CLI
                 case option
                 when "#{ind + 1}"
                    screen_clear
-                   #Launchy.open(link)
                    
                    puts "[- #{article_title} -]".bold.green
                    puts " - #{date_author} - \n".yellow
@@ -104,7 +100,6 @@ class Newsjournal::CLI
                     Launchy.open(webbrowser)
                    end
 
-                   
                    menu_response = prompt.select("Go back to Main Screen or Exit?", ["Go Back", "Exit"])
 
                    if menu_response == "Go Back"
@@ -118,6 +113,7 @@ class Newsjournal::CLI
             }
         end
     end
+
 
     def news_close
         Newsjournal::NewsGreet.newsEndGreet

@@ -35,7 +35,6 @@ class Newsjournal::NewsScraper
                     sum = breaking.css("p.article__summary").text.split.join(" ")
                     date_auth = breaking.css("ul.article__details").text.split.join(" ")
                     date_stamp = breaking.css("li.article__timestamp").text.split.join(" ")
-
                     if url == "#" || url == ""
                         r_nil 
                     elsif !news_parts.articles.detect { |a| a.article == article }

@@ -12,18 +12,18 @@ class Newsjournal::NewsArticle
         @sum = sum 
         @date_auth = date_auth
         @date_stamp = date_stamp
-
         @@articles << self
     end
+
+    
     
     def self.articles
-        #@@articles.sort { |article1, article2| article2.date_stamp <=> article1.date_stamp }
-        @@articles
+        @@articles.sort! { |ar1, ar2| ar2.date_stamp <=> ar1.date_stamp }
     end
-
+    
 end
 
-#binding.pry
+
 
 
 
