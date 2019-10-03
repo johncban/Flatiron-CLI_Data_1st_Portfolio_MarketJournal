@@ -7,6 +7,7 @@ class Newsjournal::NewsGreet
         end
     end
 
+    
     def self.newsStartGreet
         font = TTY::Font.new(:doom)
         current_td = Time.now

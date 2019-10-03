@@ -20,6 +20,7 @@ class Newsjournal::NewsArticle
     def self.articles
         @@articles.sort! { |ar1, ar2| ar2.date_stamp <=> ar1.date_stamp }
     end
+
     
 end
 
