@@ -11,4 +11,3 @@ gem 'colorize'
 gem 'tty-prompt'
 gem 'tty-font'
 
-gemspec
