@@ -45,4 +45,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "awesome_print"
   spec.add_dependency "launchy"
   spec.add_dependency "colorize"
+  spec.add_dependency "tty-prompt"
+  spec.add_dependency "tty-font"
 end
