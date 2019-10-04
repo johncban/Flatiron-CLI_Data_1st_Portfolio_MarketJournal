@@ -1,97 +1,121 @@
 class Newsjournal::CLI
     def contents
-
         self.news_greet
-        self.news_articles_post
+        self.news_articles
         self.news_articlemenu
         self.news_close
-
     end
 
     def news_greet
         Newsjournal::NewsGreet.newsStartGreet
+        Newsjournal::NewsScraper.get_articles
         puts "--------------------------------------------------------------------------------------".blue
-        puts "Here are the following Financial breaking news...".white.bold
+        puts "Here are the following #{article_count} breaking news...".white.bold
         puts "--------------------------------------------------------------------------------------".blue
-        Newsjournal::NewsArticle.start_scrape
+    end
+
+    def get_article_headlines
+        Newsjournal::NewsArticle.articles
+    end
+
+    def article_count
+        get_article_headlines.length
+    end
+
+    def screen_clear
+        if Gem.win_platform?
+          system 'cls'
+        else
+          system 'clear'
+        end
     end
 
     def news_articles
-        Newsjournal::NewsArticle.articles#.take(40)
-    end
-
-    def news_articles_post
-        #puts news_articles.length
-        news_articles.each_with_index{|ar, id| 
-            puts "#{id + 1}- ".bold.green + "#{ar.article}".bold.yellow
-            puts "\n"
+        get_article_headlines.each_with_index{|ar, id| 
+            puts "#{id + 1}".yellow + " ‣ " + "#{ar.article}".bold.yellow + " ⬡ " + "#{ar.date_stamp}"
         }
         puts "\n"
         puts "Type [ x ] to exit the app.".colorize(:color => :red).bold
         puts "--------------------------------------------------------------------------------------".blue
         puts "Select an Article ID to Read: ".bold.yellow
-        #binding.pry
     end
     
     def news_articlemenu
         option = nil
-        while option != "b"
+        prompt = TTY::Prompt.new 
+
+        while option != "x"
             option = gets.strip.downcase
 
-            if option.to_i > news_articles.length
-                puts "Please enter 1 to #{news_articles.length} numerical options for article."
+            if option.to_i > article_count
+                puts "Please enter 1 to #{article_count} numerical options for article."
             else
-                puts "Please enter or follow the screen option only"
+                puts "Please enter or follow the screen option only."
             end 
+            
 
-            news_articles.each_with_index{ |far, ind|
+            get_article_headlines.each_with_index { |far, ind|
                 article_title = far.article
-                fullarticle = far.full
-                sumarticle = far.sum
-                date_auth = far.date_auth
+                full_article = far.full
+                sum_article = far.sum
+                date_author = far.date_auth
+                webbrowser = far.url
 
                 case option
                 when "#{ind + 1}"
-                   puts `clear`                  
-                   puts "[-- #{article_title} --]".bold.green
-                   puts " -- #{date_auth} -- \n".yellow
-                   if far.sum == ""
-                    puts "    ---------- ! Summary Not Available. ! ----------    ".colorize(:color => :red).bold
-                    puts "\n"
-                   else 
-                    puts "|-- Summary --|".bold
-                    puts "------------------------------------------------------------------------------------------------".white
-                    puts sumarticle.white
-                    puts "------------------------------------------------------------------------------------------------".white
-                    puts "\n"
-                   end
-                   puts "*************************************************************************************************\n".blue
-                   if fullarticle == "                    "
-                    puts "    ---- ! Full Article Not Available. Articles are for Paid Members Only. ! ----    ".colorize(:color => :red).bold
-                    puts "\n"
-                   else
-                    puts "|-- Full Article --|".colorize(:color => :green).bold
-                    puts fullarticle.green
-                    puts "\n"
-                   end
-                   puts "*************************************************************************************************\n".blue
-                   puts "\n"
-                   puts "-> Type [ b ] to go back to main menu.".colorize(:color => :blue).bold
-                   puts "-> Type [ x ] to exit the app.".colorize(:color => :blue).bold
+                   screen_clear
                    
-                when "b"
-                    puts `clear`
-                    contents
-                when "x"
-                    news_close
+                   puts "[- #{article_title} -]".bold.green
+                   puts " - #{date_author} - \n".yellow
+                   
+                   if sum_article == "" || sum_article == nil 
+                      puts "--------------------------------------------------------------------------------------".red
+                      puts "-- !! Summary Not Available !! --".colorize(:color => :red).bold
+                      puts "--------------------------------------------------------------------------------------".red
+                   else 
+                      puts "\n"
+                      puts "| Summary |".colorize(:color => :white).bold
+                      puts "\n"
+                      puts "#{far.sum}".white
+                      puts "\n"
+                   end
+
+                   if full_article == "                    " || full_article == nil
+                      puts "--------------------------------------------------------------------------------------".red
+                      puts "-- !! Full Article is Only Available for Subscribers !! --".colorize(:color => :red).bold
+                      puts "--------------------------------------------------------------------------------------".red
+                      response = prompt.select("Do you wanted to read the article online from external source?", ["yes", "no"])
+                      puts "\n"
+                   else 
+                      puts "--------------------------------------------------------------------------------------".blue
+                      puts "\n"
+                      puts full_article.green
+                      puts "\n"
+                      puts "--------------------------------------------------------------------------------------".blue
+                      response = prompt.select("Do you wanted to read the article online?", ["yes", "no"])
+                      puts "\n"
+                   end
+
+                   if response == "yes"
+                    Launchy.open(webbrowser)
+                   end
+
+                   menu_response = prompt.select("Go back to Main Screen or Exit?", ["Go Back", "Exit"])
+
+                   if menu_response == "Go Back"
+                        screen_clear
+                        get_article_headlines.clear
+                        contents
+                   elsif menu_response == "Exit"
+                        news_close
+                   end
                 end
             }
         end
     end
 
+
     def news_close
         Newsjournal::NewsGreet.newsEndGreet
     end
-
-
 end
