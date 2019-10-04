@@ -77,6 +77,8 @@ Make sure you're in the root folder of the clone repo, inside the repo run the f
 3. [HttParty](https://rubygems.org/gems/httparty)
 4. [Launchy](https://rubygems.org/gems/launchy)
 5. [Nokogiri](https://rubygems.org/gems/nokogiri)
+6. [TTY-Prompt](https://github.com/piotrmurach/tty-prompt)
+7. [TTY-Font](https://github.com/piotrmurach/tty-font)
 
 
 ## Contributing
